@@ -310,6 +310,54 @@ test('an interrupted optional scene chunk preserves controls, text and card expo
   expect((await downloaded).suggestedFilename()).toBe('velora-garden-dusk.svg')
 })
 
+test('offscreen and hidden changes defer GPU draws until the scene is visible', async ({ page }) => {
+  await page.addInitScript(() => {
+    const counts = { draws: 0 }
+    Object.assign(window, { __veloraVisibilityQA: counts })
+    for (const name of ['drawArrays', 'drawElements'] as const) {
+      const original = WebGL2RenderingContext.prototype[name]
+      Object.defineProperty(WebGL2RenderingContext.prototype, name, {
+        configurable: true,
+        value: function (this: WebGL2RenderingContext, ...args: unknown[]) {
+          counts.draws++
+          return Reflect.apply(original, this, args)
+        },
+      })
+    }
+  })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await open(page)
+  const scene = page.locator('.velora-scene')
+  await expect(scene).toHaveAttribute('data-renderer', 'webgl')
+  const draws = () => page.evaluate(() => (window as unknown as { __veloraVisibilityQA: { draws: number } }).__veloraVisibilityQA.draws)
+  await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }))
+  await page.waitForTimeout(200)
+  const offscreen = await draws()
+  expect(offscreen).toBeGreaterThan(0)
+  await page.setViewportSize({ width: 1300, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'no-preference' })
+  await page.evaluate(() => document.querySelector<HTMLButtonElement>('#space-garden')!.click())
+  await expect(scene).toHaveAttribute('data-space', 'garden')
+  await page.waitForTimeout(200)
+  expect(await draws()).toBe(offscreen)
+  await scene.scrollIntoViewIfNeeded()
+  await expect.poll(draws).toBeGreaterThan(offscreen)
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true })
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  const hidden = await draws()
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.waitForTimeout(200)
+  expect(await draws()).toBe(hidden)
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => false })
+    document.dispatchEvent(new Event('visibilitychange'))
+  })
+  await expect.poll(draws).toBeGreaterThan(hidden)
+})
+
 test('responsive layouts and accessibility: desktop, mobile, 320px and landscape', async ({ page }) => {
   for (const viewport of [
     { width: 1440, height: 1000, name: 'desktop' },

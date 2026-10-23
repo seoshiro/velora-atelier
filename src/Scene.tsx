@@ -97,7 +97,7 @@ export default function Scene(props: SceneProps) {
       if (!context) return
       renderer = new THREE.WebGLRenderer({ canvas, context, antialias: true, alpha: false, powerPreference: 'low-power' })
     } catch { return }
-    let disposed = false, lost = false, inView = true, frame = 0, lastTime = 0, elapsed = 0
+    let disposed = false, lost = false, inView = false, hasRendered = false, frame = 0, lastTime = 0, elapsed = 0
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const canMove = () => current.current.motion && !reducedMotion.matches
     const pointer = new THREE.Vector2(), target = new THREE.Vector2()
@@ -196,13 +196,14 @@ export default function Scene(props: SceneProps) {
     olive.position.set(3.4, .2, -1.1); spaces.garden.add(olive)
 
     const render = () => {
-      if (disposed || lost) return
+      if (disposed || lost || !inView || document.hidden) return
       pointer.lerp(target, .035)
       const moving = canMove()
       camera.position.set(baseCamera.x + (moving ? pointer.x * 1.05 : 0), baseCamera.y + (moving ? pointer.y * .55 + scroll * .7 : 0), baseCamera.z + (moving ? scroll * .6 : 0))
       camera.lookAt(lookAt)
       waterUniforms.uTime.value = moving ? elapsed : 0
       renderer.render(scene, camera)
+      if (!hasRendered) { hasRendered = true; setReady(true) }
     }
     const loop = (time: number) => {
       frame = 0
@@ -227,7 +228,7 @@ export default function Scene(props: SceneProps) {
     }
     live.current = { render, apply }
     const resize = () => {
-      if (lost) return
+      if (disposed || lost || !inView || document.hidden) return
       const { width, height } = wrapper.getBoundingClientRect()
       if (!width || !height) return
       renderer.setSize(width, height)
@@ -249,14 +250,14 @@ export default function Scene(props: SceneProps) {
       scroll = THREE.MathUtils.clamp((rect.top + rect.height / 2 - innerHeight / 2) / innerHeight, -1, 1)
       schedule()
     }
-    const onVisibility = () => { if (document.hidden) { cancelAnimationFrame(frame); frame = 0 } else schedule() }
+    const onVisibility = () => { if (document.hidden) { cancelAnimationFrame(frame); frame = 0 } else { resize(); schedule() } }
     const onReducedMotion = () => { render(); schedule() }
-    const onContextLost = (event: Event) => { event.preventDefault(); lost = true; setReady(false); cancelAnimationFrame(frame); frame = 0 }
-    const onContextRestored = () => { lost = false; apply(current.current); resize(); setReady(true) }
+    const onContextLost = (event: Event) => { event.preventDefault(); lost = true; hasRendered = false; setReady(false); cancelAnimationFrame(frame); frame = 0 }
+    const onContextRestored = () => { lost = false; apply(current.current); resize() }
     const resizeObserver = new ResizeObserver(resize)
     const intersection = new IntersectionObserver(entries => {
       inView = entries[0].isIntersecting
-      if (inView) schedule(); else { cancelAnimationFrame(frame); frame = 0 }
+      if (inView) { resize(); schedule() } else { cancelAnimationFrame(frame); frame = 0 }
     }, { rootMargin: '40px' })
     resizeObserver.observe(wrapper); intersection.observe(wrapper)
     wrapper.addEventListener('pointermove', onPointer)
@@ -266,7 +267,7 @@ export default function Scene(props: SceneProps) {
     reducedMotion.addEventListener('change', onReducedMotion)
     renderer.domElement.addEventListener('webglcontextlost', onContextLost)
     renderer.domElement.addEventListener('webglcontextrestored', onContextRestored)
-    apply(current.current); resize(); setReady(true); schedule()
+    apply(current.current); resize(); schedule()
     return () => {
       disposed = true; cancelAnimationFrame(frame); live.current = null
       resizeObserver.disconnect(); intersection.disconnect()
