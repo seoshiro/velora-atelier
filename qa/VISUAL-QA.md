@@ -42,6 +42,14 @@ The reviewer inspected the actual desktop, portrait, 320 px and landscape screen
 - [No WebGL and reduced motion](screenshots/local-mobile-no-webgl-reduced-motion.png)
 - [Paused scene pixel hashes](screenshots/local-visual-hashes.json): nine distinct state hashes. The final capture method temporarily hides text/control overlays so only architectural pixels are compared.
 
+## First CI timing investigation
+
+The first CI run, [40031760467](https://github.com/seoshiro/velora-atelier/actions/runs/40031760467), passed seven stories. The long active-motion normal journey reached the repeated-selection phase on both attempts and exhausted the shared 45-second test deadline. Independent inspection of both downloaded browser traces found bounded completed actions: attempt one completed 13 clicks (23,679.2 ms total, maximum 2,386 ms); the retry completed 16 clicks (27,862.2 ms total, maximum 1,846.1 ms). No completed browser action exceeded 2,386 ms. The final pending calls continued through normal visibility/stability/scroll preparation close to the deadline; the traces do not show an individual long action hang. The responsive story also passed in 44.0 seconds on that runner.
+
+This supports cumulative software-rendering/automation overhead as the cause, rather than a permanently unavailable control. [Compact trace timing data](ci-timing-summary.json) preserves the measured call durations. Bulk downloaded evidence is excluded from the repository.
+
+The integrator set the CI story budget to 120 seconds and added explicit limits of 15 seconds per action and 30 seconds per navigation. Local stories remain at 45 seconds and assertions at 8 seconds. All eight stories, active motion, all nine states, screenshots, accessibility scans and the single worker remain intact. The increased whole-story budget accommodates the measured cumulative work, while explicit per-action limits still expose a stalled control. A new CI run must establish the result; the failed first run is not a release pass.
+
 ## Remaining verification
 
 Production URL, deployed commit and asset identity, production E2E and production screenshots are pending publication. Firefox, Safari/WebKit, physical mobile hardware and a screen-reader session have not been tested.

@@ -30,7 +30,7 @@ npm run build
 npm run test:e2e
 ```
 
-Playwright uses the existing Chromium installation on the development Windows machine and the preinstalled Google Chrome on the Ubuntu GitHub runner. CI does not download apt dependencies. For another machine, install the matching Playwright browser or configure an installed compatible browser.
+Playwright uses the existing Chromium installation on the development Windows machine and the preinstalled Google Chrome on the pinned Ubuntu 24.04 GitHub runner. CI does not download apt dependencies. All Actions are pinned to verified official release SHAs. The complete long CI story has a 120 s total budget, with 15 s action and 30 s navigation limits; local stories retain 45 s. For another machine, install the matching Playwright browser or configure an installed compatible browser.
 
 To run the complete browser suite against a public deployment, set `BASE_URL=https://seoshiro.github.io/velora-atelier/` and run `npm run test:e2e`. Production build embeds its exact source commit in `release.json`; `node scripts/verify-release.mjs <url>` compares the deployed SHA and every asset's SHA-256 against the local build.
 

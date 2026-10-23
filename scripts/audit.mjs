@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { platform } from 'node:os'
+import { join } from 'node:path'
 
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(`--${name}`)
@@ -11,7 +12,7 @@ const label = arg('label', 'local')
 if (!/^[a-z0-9-]+$/.test(label)) throw new Error('Use a plain audit label')
 const runs = Number(arg('runs', '3'))
 if (!Number.isInteger(runs) || runs < 1 || runs > 5) throw new Error('Audit runs must be 1–5')
-const installed = 'C:/Users/gokusen/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe'
+const installed = join(process.env.LOCALAPPDATA || '', 'ms-playwright', 'chromium-1248', 'chrome-win64', 'chrome.exe')
 const browser = await chromium.launch({
   headless: true,
   ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : existsSync(installed) ? { executablePath: installed } : {}),

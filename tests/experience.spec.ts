@@ -210,9 +210,13 @@ test('responsive layouts and accessibility: desktop, mobile, 320px and landscape
       await expect(page.locator(section)).toBeVisible()
       await noOverflow(page)
     }
-    await page.evaluate(() => scrollTo(0, 0))
+    await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }))
     await capture(page, viewport.name)
-    if (viewport.name === 'desktop') await page.locator('.hero').screenshot({ path: `qa/screenshots/${prefix}-desktop-hero.png`, animations: 'disabled' })
+    if (viewport.name === 'desktop') {
+      await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }))
+      await page.screenshot({ path: `qa/screenshots/${prefix}-desktop-viewport.png`, fullPage: false, animations: 'disabled' })
+      await page.locator('.hero').screenshot({ path: `qa/screenshots/${prefix}-desktop-hero.png`, animations: 'disabled' })
+    }
     const accessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
     expect.soft(accessibility.violations.map(issue => ({ id: issue.id, impact: issue.impact, nodes: issue.nodes.map(node => node.target) })), `WCAG scan at ${viewport.width} × ${viewport.height}`).toEqual([])
   }

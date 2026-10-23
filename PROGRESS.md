@@ -11,4 +11,6 @@
 - Actual desktop/mobile/320px/landscape screenshots reviewed; no material visual defects remain.
 - Performance audit completed: median local FCP/LCP 1076 ms and WebGL ready 1834 ms under 4x CPU slowdown, 3 trials. Runtime quiet-state RAF counts 0/0/0. Startup long tasks remain documented, no field performance claims.
 - Typecheck includes app/tests/config; lint/build and 6 unit tests pass. Nine architecture-only paused screenshot hashes reverified distinct after hiding overlays.
-- Pending: public Pages deployment, exact-SHA/HTML/all-asset verification and real live suite.
+- Public repository created and pushed at `42590a0781fa7af8b4b334fa0582bc5364f01e79`; Pages configured with workflow source.
+- First CI run `40031760467`: source/build gates passed; 7/8 Chrome browser stories passed. Long all-state/repeated-control journey exceeded 45-second total budget while still progressing. Deployment correctly did not run. Independent trace review pending; no tests shortened.
+- Pending: fix verified CI timing issue, successful Pages deployment, exact-SHA/HTML/all-asset verification and real live suite.

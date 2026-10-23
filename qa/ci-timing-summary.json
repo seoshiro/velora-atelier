@@ -1,0 +1,375 @@
+[
+  {
+    "attempt": "experience-three-spaces-al-8a53a--and-an-honest-SVG-download",
+    "actions": 40,
+    "completedActions": 40,
+    "completedClickCount": 13,
+    "maxCompletedClickMs": 2386.0,
+    "totalClickMs": 23679.2,
+    "maxCompletedActionMs": 2386.0,
+    "completedActionMs": 34276.2,
+    "slowest": [
+      {
+        "callId": "xwac@76",
+        "method": "click",
+        "ms": 2386.0,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@84",
+        "method": "click",
+        "ms": 2345.7,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@94",
+        "method": "click",
+        "ms": 2045.7,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@47",
+        "method": "newPage",
+        "ms": 1955.1,
+        "selector": null,
+        "error": null
+      },
+      {
+        "callId": "xwac@64",
+        "method": "click",
+        "ms": 1876.0,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@124",
+        "method": "click",
+        "ms": 1848.7,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@92",
+        "method": "click",
+        "ms": 1848.5,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@132",
+        "method": "click",
+        "ms": 1825.7,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@102",
+        "method": "click",
+        "ms": 1799.4,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@62",
+        "method": "click",
+        "ms": 1783.5,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      }
+    ],
+    "failed": [],
+    "clickTimings": [
+      {
+        "callId": "xwac@62",
+        "method": "click",
+        "ms": 1783.5,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@64",
+        "method": "click",
+        "ms": 1876.0,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@76",
+        "method": "click",
+        "ms": 2386.0,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@84",
+        "method": "click",
+        "ms": 2345.7,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@92",
+        "method": "click",
+        "ms": 1848.5,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@94",
+        "method": "click",
+        "ms": 2045.7,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@102",
+        "method": "click",
+        "ms": 1799.4,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@114",
+        "method": "click",
+        "ms": 1631.3,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@122",
+        "method": "click",
+        "ms": 1038.1,
+        "selector": "internal:role=button[name=\"Explore 03 Quiet Garden\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@124",
+        "method": "click",
+        "ms": 1848.7,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@132",
+        "method": "click",
+        "ms": 1825.7,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@140",
+        "method": "click",
+        "ms": 1604.0,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "xwac@152",
+        "method": "click",
+        "ms": 1646.6,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      }
+    ]
+  },
+  {
+    "attempt": "experience-three-spaces-al-8a53a--and-an-honest-SVG-download-retry1",
+    "actions": 43,
+    "completedActions": 43,
+    "completedClickCount": 16,
+    "maxCompletedClickMs": 1846.1,
+    "totalClickMs": 27862.200000000004,
+    "maxCompletedActionMs": 1846.1,
+    "completedActionMs": 34381.400000000016,
+    "slowest": [
+      {
+        "callId": "duwg@132",
+        "method": "click",
+        "ms": 1846.1,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@124",
+        "method": "click",
+        "ms": 1828.2,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@84",
+        "method": "click",
+        "ms": 1818.4,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@152",
+        "method": "click",
+        "ms": 1812.9,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@140",
+        "method": "click",
+        "ms": 1811.5,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@92",
+        "method": "click",
+        "ms": 1800.0,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@156",
+        "method": "click",
+        "ms": 1797.4,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@102",
+        "method": "click",
+        "ms": 1793.0,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@94",
+        "method": "click",
+        "ms": 1788.0,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@158",
+        "method": "click",
+        "ms": 1785.9,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      }
+    ],
+    "failed": [],
+    "clickTimings": [
+      {
+        "callId": "duwg@62",
+        "method": "click",
+        "ms": 1679.1,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@64",
+        "method": "click",
+        "ms": 1668.7,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@76",
+        "method": "click",
+        "ms": 1698.7,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@84",
+        "method": "click",
+        "ms": 1818.4,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@92",
+        "method": "click",
+        "ms": 1800.0,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@94",
+        "method": "click",
+        "ms": 1788.0,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@102",
+        "method": "click",
+        "ms": 1793.0,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@114",
+        "method": "click",
+        "ms": 1661.0,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@122",
+        "method": "click",
+        "ms": 1287.9,
+        "selector": "internal:role=button[name=\"Explore 03 Quiet Garden\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@124",
+        "method": "click",
+        "ms": 1828.2,
+        "selector": "internal:role=button[name=\"Morning\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@132",
+        "method": "click",
+        "ms": 1846.1,
+        "selector": "internal:role=button[name=\"Midday\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@140",
+        "method": "click",
+        "ms": 1811.5,
+        "selector": "internal:role=button[name=\"Dusk\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@152",
+        "method": "click",
+        "ms": 1812.9,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@154",
+        "method": "click",
+        "ms": 1785.4,
+        "selector": "internal:role=button[name=\"Explore 03 Quiet Garden\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@156",
+        "method": "click",
+        "ms": 1797.4,
+        "selector": "internal:role=button[name=\"Explore 02 Water Court\"s]",
+        "error": null
+      },
+      {
+        "callId": "duwg@158",
+        "method": "click",
+        "ms": 1785.9,
+        "selector": "internal:role=button[name=\"Explore 01 Atrium of Light\"s]",
+        "error": null
+      }
+    ]
+  }
+]

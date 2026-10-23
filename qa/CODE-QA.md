@@ -32,7 +32,7 @@ Line references describe the inspected version and may move after fixes. The rev
 
 ## Measured local build
 
-Evidence: [performance-local.json](performance-local.json), produced by `node scripts/audit.mjs --label local --runs 3 --lifecycle`. Conditions: installed Chromium 156.0.8078.4, Playwright 1.64.1, Windows, headless, viewport 1440 x 1000, DPR 1, CDP 4x CPU slowdown, unthrottled network, fresh browser context/cache for each of three sequential trials. No other project browser audit ran concurrently. Each navigation was observed for 3 seconds after network idle.
+Evidence: [performance-local.json](performance-local.json), produced by `node scripts/audit.mjs --label local --runs 3 --lifecycle`. Conditions: installed Chromium 156.0.8078.4, Playwright 1.64.1, Windows, headless, viewport 1440 x 1000, DPR 1, CDP 4x CPU slowdown, unthrottled network, fresh browser context/cache for each of three sequential trials. No other VELORA browser audit ran concurrently; unrelated host workload was not controlled. Each navigation was observed for 3 seconds after network idle.
 
 | Metric | Trial 1 | Trial 2 | Trial 3 | Interpretation |
 | --- | --- | --- | --- | --- |
