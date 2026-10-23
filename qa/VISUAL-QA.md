@@ -1,6 +1,16 @@
 # Independent visual and browser QA
 
-Status: LOCAL PASS. Production checks are pending publication and are not implied by the local result.
+Status: INDEPENDENT PRODUCTION BROWSER PASS. The full nine-story suite passed on the public site in 45.0 seconds, using one Windows Chromium worker and isolated contexts. Before the run, the public release manifest confirmed commit `f1ba687997ce107dfa664dbe6fa7eb051559f8e6` and 12 assets. Asset digest verification is a separate CI/integrator gate.
+
+## Production result
+
+Target: [VELORA](https://seoshiro.github.io/velora-atelier/). All nine stories passed: every space/light choice and actual architecture pixels, repeated/interrupted choices, real SVG download, query/history/reload, section links and focus, keyboard and motion, touch/reduced motion without WebGL, interrupted optional chunk, actual GPU context loss/restoration and four-layout accessibility/overflow. Axe reports zero WCAG 2/2.1 A/AA violations at 1440 x 1000, 390 x 844, 320 x 740 and 844 x 390. The independent reviewer inspected all four actual live layouts and found no material obstruction, clipping or layout break.
+
+The normal production journey on Windows Chromium 156 / AMD ANGLE Direct3D11 had zero unknown warnings/errors, page/network failures and classified driver diagnostics. This is distinct from deliberate fault injection in the fallback tests and the retained exact Chrome 155/Linux CI driver readback diagnostics documented below. The live GPU recovery image matched its same-run garden/dusk reference with mean RGB difference zero; the next light control worked. All nine paused architectural states have unique pixel hashes.
+
+- [Production summary](production-browser-summary.json)
+- [Desktop viewport including header](screenshots/live-desktop-viewport.png), [full page](screenshots/live-desktop.png), [mobile](screenshots/live-mobile.png), [320 px](screenshots/live-narrow-320.png) and [landscape](screenshots/live-mobile-landscape.png)
+- [Live console/GL diagnostics](screenshots/live-console-diagnostics.json), [context recovery](screenshots/live-context-recovery.json) and [nine architecture hashes](screenshots/live-visual-hashes.json)
 
 ## Method
 
@@ -54,7 +64,7 @@ The first CI run, [40031760467](https://github.com/seoshiro/velora-atelier/actio
 
 This supports cumulative software-rendering/automation overhead as the cause, rather than a permanently unavailable control. [Compact trace timing data](ci-timing-summary.json) preserves the measured call durations. Bulk downloaded evidence is excluded from the repository.
 
-The integrator set the CI story budget to 120 seconds and added explicit limits of 15 seconds per action and 30 seconds per navigation. Local stories remain at 45 seconds and assertions at 8 seconds. All eight stories, active motion, all nine states, screenshots, accessibility scans and the single worker remain intact. The increased whole-story budget accommodates the measured cumulative work, while explicit per-action limits still expose a stalled control. A new CI run must establish the result; the failed first run is not a release pass.
+The integrator set the CI story budget to 120 seconds and added explicit limits of 15 seconds per action and 30 seconds per navigation. Local stories remain at 45 seconds and assertions at 8 seconds. All eight original stories, active motion, all nine states, screenshots, accessibility scans and the single worker remain intact. The increased whole-story budget accommodates the measured cumulative work, while explicit per-action limits still expose a stalled control. Subsequent runs completed the normal journey; the failed first run remains recorded as a failure.
 
 ## Second CI diagnostic investigation
 
@@ -66,8 +76,12 @@ Installed Playwright 1.64.1 types at `types/test.d.ts:7261` support the revised 
 
 The third run, [40033573813](https://github.com/seoshiro/velora-atelier/actions/runs/40033573813), used Chrome 155.0.8059.39 and passed eight of nine stories, including real context recovery in 9.1 seconds. The complete normal journey again failed only on the same four driver diagnostics, with trace screencast and screen snapshots disabled. The earlier trace-cause inference was therefore not established. Explicit scene PNG captures remain part of the journey and can also require image readback. These diagnostics describe a real synchronous GPU readback cost; this review does not label that cost harmless.
 
-The exact verified performance diagnostic is now classified separately only for Chrome major 155, the Chrome channel, Chromium engine, Linux CI and console warning severity. The pattern is fully anchored, permits only the hexadecimal WebGL context identifier and the exact optional final repetition notice, and rejects extra lines or text. The classified count must remain at most four. Every matching diagnostic is retained with its exact text, type, location, browser/version and actual GL vendor/renderer/version metadata in a JSON test attachment and the screenshots evidence directory. Unknown warnings, all console/page errors, failed requests and HTTP errors remain strict failures in the normal journey. Three Node policy regressions cover exact matches and the severity, platform, environment, channel, version and changed-text boundaries. All nine browser stories and all explicit PNG captures remain intact. A subsequent complete CI result is still required for release.
+The exact verified performance diagnostic is now classified separately only for Chrome major 155, the Chrome channel, Chromium engine, Linux CI and console warning severity. The pattern is fully anchored, permits only the hexadecimal WebGL context identifier and the exact optional final repetition notice, and rejects extra lines or text. The classified count must remain at most four. Every matching diagnostic is retained with its exact text, type, location, browser/version and actual GL vendor/renderer/version metadata in a JSON test attachment and the screenshots evidence directory. Unknown warnings, all console/page errors, failed requests and HTTP errors remain strict failures in the normal journey. Three Node policy regressions cover exact matches and the severity, platform, environment, channel, version and changed-text boundaries. All nine browser stories and all explicit PNG captures remain intact. The integrator reports that [40034679949](https://github.com/seoshiro/velora-atelier/actions/runs/40034679949) passed all nine pre-deploy browser stories, all nine unit tests, deployment and the live identity gate; its complete public-URL CI repeat is tracked separately from this independent Windows production pass.
 
-## Remaining verification
+The new classifier and evidence attachment passed the complete normal journey locally in 6.7 seconds (5.1 seconds execution); policy unit tests, typecheck and lint passed. [Local raw diagnostics](screenshots/local-console-diagnostics.json) identify AMD Radeon graphics through ANGLE Direct3D11 on Windows Chromium 156, with zero classified diagnostics and zero failures. The Linux CI / Chrome 155 classification is inactive in this local environment.
 
-Production URL, deployed commit and asset identity, production E2E and production screenshots are pending publication. Firefox, Safari/WebKit, physical mobile hardware and a screen-reader session have not been tested.
+Integrator release evidence: [CI 40034679949](https://github.com/seoshiro/velora-atelier/actions/runs/40034679949) is green for source/build/unit gates, all 9 pre-deploy stories and all 9 public-site stories. Independent and CI release hashes agree for the exact source commit, HTML, favicon and all 12 assets. The original independent Windows production result and live screenshots above remain separate evidence from the Linux CI run.
+
+## Untested environments
+
+Firefox, Safari/WebKit, physical mobile hardware and a screen-reader session have not been tested. Production evidence above is a real public-URL run and is not inferred from local results.

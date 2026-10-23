@@ -1,0 +1,432 @@
+{
+  "timestamp": "2026-10-23T22:42:41.419Z",
+  "url": "https://seoshiro.github.io/velora-atelier/",
+  "conditions": {
+    "browser": "156.0.8078.4",
+    "platform": "win32",
+    "headless": true,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "deviceScaleFactor": 1,
+    "cpuThrottle": 4,
+    "network": "unthrottled",
+    "cache": "new context per trial",
+    "workers": 1,
+    "observationMilliseconds": 3000
+  },
+  "trials": [
+    {
+      "trial": 1,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 291.5,
+        "domContentLoaded": 647.8999999985099,
+        "load": 648.8999999985099,
+        "transferSize": 714
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 540
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 1412
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 1412,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 540,
+            "duration": 109
+          },
+          {
+            "startTime": 655.3999999985099,
+            "duration": 108
+          },
+          {
+            "startTime": 1307.199999999255,
+            "duration": 651
+          },
+          {
+            "startTime": 1963.6000000014901,
+            "duration": 156
+          }
+        ],
+        "sceneReadyTime": 2182.89999999851
+      },
+      "resources": [
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-BgUbwRoz.js",
+          "type": "script",
+          "duration": 213.19999999925494,
+          "transferSize": 78503,
+          "encodedBodySize": 78203,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 210.90000000223517,
+          "transferSize": 4923,
+          "encodedBodySize": 4623,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-9p_Hdmp_.js",
+          "type": "script",
+          "duration": 183.59999999776483,
+          "transferSize": 146091,
+          "encodedBodySize": 145791,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 182.39999999850988,
+          "transferSize": 649,
+          "encodedBodySize": 349,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 555.5999999977648,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 555.0999999977648,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 555,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 100.69999999925494,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 6,
+        "RecalcStyleCount": 137,
+        "ScriptDuration": 1.3383,
+        "TaskDuration": 2.584834,
+        "JSHeapUsedSize": 7290712,
+        "JSHeapTotalSize": 11534336
+      },
+      "pageErrors": [],
+      "consoleMessages": [],
+      "failedRequests": [],
+      "httpErrors": []
+    },
+    {
+      "trial": 2,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 291.5999999977648,
+        "domContentLoaded": 638.3999999985099,
+        "load": 639.1999999992549,
+        "transferSize": 714
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 440
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 1240
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 1240,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 539,
+            "duration": 101
+          },
+          {
+            "startTime": 646.0999999977648,
+            "duration": 90
+          },
+          {
+            "startTime": 1283.0999999977648,
+            "duration": 375
+          },
+          {
+            "startTime": 1663.5999999977648,
+            "duration": 150
+          }
+        ],
+        "sceneReadyTime": 1839
+      },
+      "resources": [
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-BgUbwRoz.js",
+          "type": "script",
+          "duration": 216.39999999850988,
+          "transferSize": 78503,
+          "encodedBodySize": 78203,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 104.69999999925494,
+          "transferSize": 4923,
+          "encodedBodySize": 4623,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-9p_Hdmp_.js",
+          "type": "script",
+          "duration": 186.20000000298023,
+          "transferSize": 146091,
+          "encodedBodySize": 145791,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 184.69999999925494,
+          "transferSize": 649,
+          "encodedBodySize": 349,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 548.6999999992549,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 555.5,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 557.8000000007451,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 90.5,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 7,
+        "RecalcStyleCount": 138,
+        "ScriptDuration": 0.978302,
+        "TaskDuration": 2.136212,
+        "JSHeapUsedSize": 7096868,
+        "JSHeapTotalSize": 11796480
+      },
+      "pageErrors": [],
+      "consoleMessages": [],
+      "failedRequests": [],
+      "httpErrors": []
+    },
+    {
+      "trial": 3,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 278.1000000014901,
+        "domContentLoaded": 619.1999999992549,
+        "load": 619.9000000022352,
+        "transferSize": 714
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 420
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 1220
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 1220,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 523.6999999992549,
+            "duration": 97
+          },
+          {
+            "startTime": 625.8000000007451,
+            "duration": 96
+          },
+          {
+            "startTime": 1262,
+            "duration": 344
+          },
+          {
+            "startTime": 1611.199999999255,
+            "duration": 178
+          }
+        ],
+        "sceneReadyTime": 1823.199999999255
+      },
+      "resources": [
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-BgUbwRoz.js",
+          "type": "script",
+          "duration": 217.69999999925494,
+          "transferSize": 78503,
+          "encodedBodySize": 78203,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 97.89999999850988,
+          "transferSize": 4923,
+          "encodedBodySize": 4623,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-9p_Hdmp_.js",
+          "type": "script",
+          "duration": 194.39999999850988,
+          "transferSize": 146091,
+          "encodedBodySize": 145791,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 94.5,
+          "transferSize": 649,
+          "encodedBodySize": 349,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 548.6000000014901,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 556.8999999985099,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 554.2000000029802,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "https://seoshiro.github.io/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 94.90000000223517,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 7,
+        "RecalcStyleCount": 138,
+        "ScriptDuration": 1.029748,
+        "TaskDuration": 2.388873,
+        "JSHeapUsedSize": 6687120,
+        "JSHeapTotalSize": 11010048
+      },
+      "pageErrors": [],
+      "consoleMessages": [],
+      "failedRequests": [],
+      "httpErrors": []
+    }
+  ],
+  "lifecycle": {
+    "observationMilliseconds": 1000,
+    "settleMilliseconds": 500,
+    "activeFrames": 145,
+    "pausedFrames": 0,
+    "offscreenFrames": 0,
+    "reducedFrames": 0,
+    "pass": true
+  }
+}

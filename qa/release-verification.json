@@ -1,0 +1,77 @@
+{
+  "url": "https://seoshiro.github.io/velora-atelier/",
+  "verifiedAt": "2026-10-23T22:40:54.745Z",
+  "commit": "f1ba687997ce107dfa664dbe6fa7eb051559f8e6",
+  "assets": [
+    {
+      "name": "index.html",
+      "sha256": "a534eb6a69cd5983e616a90ddd82e0e23bd534c2193291de88dfd10ae9951eaa",
+      "bytes": 684
+    },
+    {
+      "name": "favicon.svg",
+      "sha256": "8c62061fcec080227e0f842a61e465ca647cb2b659a356fe084d5589843587cc",
+      "bytes": 214
+    },
+    {
+      "name": "assets/Scene-9p_Hdmp_.js",
+      "sha256": "eb34fa5f40d9d2854410de611f20202e9313cf58a3f5a0c979c988b12f896772",
+      "bytes": 571871
+    },
+    {
+      "name": "assets/Scene-ovwgmY27.css",
+      "sha256": "aafae9276a9653efdf28c29d6279f0218d2f710772262de753af1b4277500f48",
+      "bytes": 819
+    },
+    {
+      "name": "assets/cormorant-garamond-latin-400-italic-BLh7T8o8.woff",
+      "sha256": "337d07118277acbf5a0eb19c602aaf917b2485585360f2c7139ce42d9d4e6cc1",
+      "bytes": 32888
+    },
+    {
+      "name": "assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+      "sha256": "e48e58027030df56869b795ca6f19b7012158275f7ad7cde1900b4a0b68d02e2",
+      "bytes": 23660
+    },
+    {
+      "name": "assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+      "sha256": "8048ac209bec741e1c29cd0cfac5aac1c0c2ba8c3ddbd4a58fa9bd92ef5c63c2",
+      "bytes": 22876
+    },
+    {
+      "name": "assets/cormorant-garamond-latin-400-normal-B7YtguxJ.woff",
+      "sha256": "b926f33f9d3d5cb64e639b8fe9ad5380560a63f3e7a29d212f2b80a2d22ec051",
+      "bytes": 30980
+    },
+    {
+      "name": "assets/dm-sans-latin-400-normal-BwCSEQnW.woff",
+      "sha256": "38702875fe179437d200e7ba6f7fab4d497ffe48117ef332029b2081751186ad",
+      "bytes": 18356
+    },
+    {
+      "name": "assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+      "sha256": "4ab51eb2cd7305d177187908d6397474d4520663f6c6e572feb0a64f4fa80006",
+      "bytes": 14200
+    },
+    {
+      "name": "assets/dm-sans-latin-500-normal-B9HHJjqV.woff2",
+      "sha256": "19bf1984956517c35c2bd35b6cdedac12a21d6fcd3596c614ecdfb88b648909d",
+      "bytes": 14304
+    },
+    {
+      "name": "assets/dm-sans-latin-500-normal-Dr3UlScf.woff",
+      "sha256": "7deb957e430b780ee3272d801af4f9f2211b1330ec40a312a8f25309eacb4034",
+      "bytes": 18520
+    },
+    {
+      "name": "assets/index-BgUbwRoz.js",
+      "sha256": "505efaf5303b6668779a4086bcb39995863788793292e7a0c5804b4c17162780",
+      "bytes": 248231
+    },
+    {
+      "name": "assets/index-C27FxPnt.css",
+      "sha256": "439e8edeedd822d2f0bf5dd4200ea2dafbc727e741f01433abe98fb97c02e3bb",
+      "bytes": 17459
+    }
+  ]
+}

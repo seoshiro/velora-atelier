@@ -1,0 +1,15 @@
+{
+  "motion": "paused",
+  "renderer": "webgl",
+  "hashes": {
+    "atrium-morning": "adcbdfab9a6df387a821f6fbf65551db0c4d67422ca443e42aeb264e0bb44f46",
+    "atrium-noon": "e867477a8ba1a70451879c61e826bf3f292d70e89663d059a31d6c0af3b663ea",
+    "atrium-dusk": "b03c38b411ac77e5a3cde2e050162126fb3723e4c1ee3f5e30dbfcec84f7c4bb",
+    "water-morning": "8abe116fedc1923c7780e3e90c7e237deee4c66629c74d3c71680169bcdb0abd",
+    "water-noon": "40c6bda7efbec5f6d344f9d7663e58cbd829aec81bb84281f18d3431515e02ac",
+    "water-dusk": "3c83b111569adf084f8c92323b4eaee6df77ff40cb36ecd3ce8b0be5bceafacb",
+    "garden-morning": "5b806655cb84f3b58576bc963011e9d0a6a45102746010fea5b887c866802a1a",
+    "garden-noon": "11c2524f9e23fc8b2234bee9f323e1f0b1ae5587fc8c4b95908e868d78a8f840",
+    "garden-dusk": "eb79a53eb6e3801faf3a0fa713b53fbf7edfc601d482df528786f1760a254233"
+  }
+}

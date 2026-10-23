@@ -1,0 +1,39 @@
+{
+  "browser": "156.0.8078.4",
+  "extension": "WEBGL_lose_context",
+  "actuallyLost": true,
+  "stillLost": false,
+  "restoredState": {
+    "space": "garden",
+    "light": "dusk"
+  },
+  "postRestoreControlCheck": {
+    "space": "garden",
+    "light": "noon"
+  },
+  "expectedHash": "eb79a53eb6e3801faf3a0fa713b53fbf7edfc601d482df528786f1760a254233",
+  "restoredHash": "eb79a53eb6e3801faf3a0fa713b53fbf7edfc601d482df528786f1760a254233",
+  "pixelComparison": {
+    "restoredToChosen": {
+      "meanRgbDelta": 0,
+      "changedRatio": 0,
+      "maximum": 0
+    },
+    "restoredToPrior": {
+      "meanRgbDelta": 52.7356765587228,
+      "changedRatio": 1,
+      "maximum": 211
+    }
+  },
+  "pageErrors": [],
+  "consoleEvents": [
+    {
+      "type": "log",
+      "text": "THREE.WebGLRenderer: Context Lost."
+    },
+    {
+      "type": "log",
+      "text": "THREE.WebGLRenderer: Context Restored."
+    }
+  ]
+}

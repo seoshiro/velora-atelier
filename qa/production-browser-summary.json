@@ -1,0 +1,42 @@
+{
+  "reportedAtUtc": "2026-10-23T22:42:58Z",
+  "target": "https://seoshiro.github.io/velora-atelier/",
+  "manifestCommitVerifiedBeforeRun": "f1ba687997ce107dfa664dbe6fa7eb051559f8e6",
+  "manifestAssetCount": 12,
+  "identityScope": "Visual QA checked the public manifest commit and asset count. The separate CI/integrator gate checks each asset digest.",
+  "browser": "Chromium 156.0.8078.4",
+  "platform": "Windows",
+  "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "workers": 1,
+  "mode": "headless, isolated Playwright contexts, public URL",
+  "storiesPassed": 9,
+  "storiesFailed": 0,
+  "runtimeSeconds": 45.0,
+  "axeTags": ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"],
+  "axeViolationsPerViewport": {
+    "1440x1000": 0,
+    "390x844": 0,
+    "320x740": 0,
+    "844x390": 0
+  },
+  "normalJourneyUnknownWarningsAndErrors": 0,
+  "normalJourneyPageOrNetworkFailures": 0,
+  "classifiedDriverDiagnostics": 0,
+  "architecturePixelStates": 9,
+  "uniqueArchitecturePixelHashes": 9,
+  "contextRecovery": {
+    "extension": "WEBGL_lose_context",
+    "actuallyLost": true,
+    "restored": true,
+    "latestStateRecovered": "garden/dusk",
+    "sameRunReferenceMeanRgbDifference": 0,
+    "postRecoveryControl": "garden/noon"
+  },
+  "manualVisualInspection": [
+    "screenshots/live-desktop-viewport.png",
+    "screenshots/live-mobile.png",
+    "screenshots/live-narrow-320.png",
+    "screenshots/live-mobile-landscape.png"
+  ],
+  "remainingUntested": ["Firefox", "Safari/WebKit", "physical mobile hardware", "screen-reader session"]
+}
