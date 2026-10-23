@@ -18,7 +18,9 @@ export default defineConfig({
     channel: process.env.CI ? 'chrome' : undefined,
     actionTimeout: 15000,
     navigationTimeout: 30000,
-    trace: 'retain-on-failure',
+    // Background trace screencasting stalls software WebGL with ReadPixels on CI.
+    // Preserve action/DOM/ARIA/source traces and all explicitly captured real screenshots.
+    trace: { mode: 'retain-on-failure', screenshots: false, snapshots: { dom: true, aria: true, screen: false }, sources: true },
     screenshot: 'only-on-failure',
     launchOptions: {
       args: ['--disable-dev-shm-usage'],

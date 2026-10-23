@@ -183,6 +183,93 @@ test('all nine architectural and light states produce distinct real scene pixels
   expect(new Set(Object.values(hashes)).size).toBe(9)
 })
 
+test('real WebGL context loss and restoration recover the latest chosen space and light', async ({ page, browser }) => {
+  const pageErrors: string[] = []
+  const consoleEvents: { type: string; text: string }[] = []
+  page.on('pageerror', error => pageErrors.push(error.message))
+  page.on('console', message => {
+    if (['warning', 'error', 'log'].includes(message.type())) consoleEvents.push({ type: message.type(), text: message.text() })
+  })
+  await open(page)
+  const scene = page.locator('.velora-scene')
+  await expect(scene).toHaveAttribute('data-renderer', 'webgl')
+  await page.getByRole('button', { name: 'Pause spatial motion', exact: true }).click()
+  await page.getByRole('button', { name: `Explore ${SPACES[2].number} ${SPACES[2].title}`, exact: true }).click()
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).click()
+  await assertSelection(page, 'garden', 'dusk')
+  await mkdir('qa/screenshots', { recursive: true })
+  const sceneCapture = { animations: 'disabled' as const, style: '.scene-topline,.scene-title,.scene-caption,.light-control{visibility:hidden!important}' }
+  const expectedPixels = await scene.screenshot({ ...sceneCapture, path: `qa/screenshots/${prefix}-context-expected-garden-dusk.png` })
+  const expectedHash = createHash('sha256').update(expectedPixels).digest('hex')
+  await page.getByRole('button', { name: `Explore ${SPACES[0].number} ${SPACES[0].title}`, exact: true }).click()
+  await page.getByRole('button', { name: LIGHTS[0].label, exact: true }).click()
+  const priorPixels = await scene.screenshot(sceneCapture)
+  const extensionAvailable = await page.evaluate(() => {
+    const canvas = document.querySelector<HTMLCanvasElement>('.velora-scene canvas')
+    const context = canvas?.getContext('webgl2')
+    const extension = context?.getExtension('WEBGL_lose_context')
+    if (!extension) return false
+    const qaWindow = window as typeof window & { veloraQaContextLoss?: WEBGL_lose_context }
+    qaWindow.veloraQaContextLoss = extension
+    extension.loseContext()
+    return true
+  })
+  expect(extensionAvailable, 'real WEBGL_lose_context extension is required for this recovery check').toBe(true)
+  await expect(scene).toHaveAttribute('data-renderer', 'illustration')
+  await expect(scene.locator('> .architecture-art')).toBeVisible()
+  const actuallyLost = await page.locator('.velora-scene canvas').evaluate(canvas => (canvas as HTMLCanvasElement).getContext('webgl2')!.isContextLost())
+  expect(actuallyLost).toBe(true)
+  await page.getByRole('button', { name: `Explore ${SPACES[2].number} ${SPACES[2].title}`, exact: true }).click()
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).click()
+  await assertSelection(page, 'garden', 'dusk')
+  await page.evaluate(() => {
+    const qaWindow = window as typeof window & { veloraQaContextLoss?: WEBGL_lose_context }
+    qaWindow.veloraQaContextLoss!.restoreContext()
+  })
+  await expect(scene).toHaveAttribute('data-renderer', 'webgl')
+  await assertSelection(page, 'garden', 'dusk')
+  const stillLost = await page.locator('.velora-scene canvas').evaluate(canvas => (canvas as HTMLCanvasElement).getContext('webgl2')!.isContextLost())
+  expect(stillLost).toBe(false)
+  const restoredPixels = await scene.screenshot({ ...sceneCapture, path: `qa/screenshots/${prefix}-context-restored-garden-dusk.png` })
+  const restoredHash = createHash('sha256').update(restoredPixels).digest('hex')
+  const pixelComparison = await page.evaluate(async sources => {
+    const decoded = await Promise.all(sources.map(async source => {
+      const image = new Image()
+      image.src = `data:image/png;base64,${source}`
+      await image.decode()
+      const canvas = document.createElement('canvas')
+      canvas.width = image.naturalWidth; canvas.height = image.naturalHeight
+      const context = canvas.getContext('2d')!
+      context.drawImage(image, 0, 0)
+      return { width: canvas.width, height: canvas.height, data: context.getImageData(0, 0, canvas.width, canvas.height).data }
+    }))
+    const compare = (first: typeof decoded[number], second: typeof decoded[number]) => {
+      if (first.width !== second.width || first.height !== second.height) throw new Error('Context recovery screenshot dimensions changed')
+      let sum = 0, changed = 0, maximum = 0
+      for (let pixel = 0; pixel < first.data.length; pixel += 4) {
+        let pixelMax = 0
+        for (let color = 0; color < 3; color++) {
+          const delta = Math.abs(first.data[pixel + color] - second.data[pixel + color])
+          sum += delta; pixelMax = Math.max(pixelMax, delta); maximum = Math.max(maximum, delta)
+        }
+        if (pixelMax) changed++
+      }
+      const pixels = first.width * first.height
+      return { meanRgbDelta: sum / (pixels * 3), changedRatio: changed / pixels, maximum }
+    }
+    return { restoredToChosen: compare(decoded[1], decoded[0]), restoredToPrior: compare(decoded[1], decoded[2]) }
+  }, [expectedPixels.toString('base64'), restoredPixels.toString('base64'), priorPixels.toString('base64')])
+  // GPU context recreation can round a small number of channels by one level.
+  // Compare the same-run chosen state with a tight numerical tolerance and require
+  // it to be at least 50 times closer than the obsolete state from before the loss.
+  expect(pixelComparison.restoredToChosen.meanRgbDelta).toBeLessThan(1)
+  expect(pixelComparison.restoredToChosen.meanRgbDelta).toBeLessThan(pixelComparison.restoredToPrior.meanRgbDelta * .02)
+  await page.getByRole('button', { name: LIGHTS[1].label, exact: true }).click()
+  await assertSelection(page, 'garden', 'noon')
+  expect(pageErrors).toEqual([])
+  await writeFile(`qa/screenshots/${prefix}-context-recovery.json`, JSON.stringify({ browser: browser.version(), extension: 'WEBGL_lose_context', actuallyLost, stillLost, restoredState: { space: 'garden', light: 'dusk' }, postRestoreControlCheck: { space: 'garden', light: 'noon' }, expectedHash, restoredHash, pixelComparison, pageErrors, consoleEvents }, null, 2))
+})
+
 test('an interrupted optional scene chunk preserves controls, text and card export', async ({ page }) => {
   await page.route(/\/assets\/Scene-[^/]+\.js$/, route => route.abort('failed'))
   await open(page)

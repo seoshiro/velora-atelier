@@ -12,6 +12,8 @@ Story: enter the fictional concept -> explore three spaces -> change the time of
 
 All eight E2E stories passed in 38.4 seconds. Expanded TypeScript checking and ESLint also passed for the test code.
 
+A ninth scenario then verified actual GPU context loss and restoration locally: 1 passed in 4.4 seconds (2.8 seconds execution), using the real `WEBGL_lose_context` extension. It observes `isContextLost()`, the illustrated fallback, changes the chosen state while lost, restores WebGL, verifies the latest architecture and exercises another light control after recovery.
+
 The architecture-only pixel capture refinement then passed its targeted rerun in 5.1 seconds (one story, 3.7 seconds execution). All nine hashes remain distinct with text/control overlays hidden.
 
 After the supported Three.js shadow constant fix, the integrator's targeted normal journey passed in 4.6 seconds (3.2 seconds execution) with warning-level console capture enabled. No browser console warnings or errors were reported.
@@ -25,6 +27,7 @@ After the supported Three.js shadow constant fix, the integrator's targeted norm
 | Navigation and collection | Section links, collection-to-hero transition and focus transfer to chosen hero control pass |
 | Keyboard and motion | Named controls, visible focus, Enter activation, pause/resume and system reduced-motion behavior pass |
 | Missing WebGL and interrupted scene chunk | Original SVG remains visible; text, controls and download work; morning and midday fallback artwork differs |
+| Real WebGL context loss and restoration | Actual loss and restoration confirmed; latest garden/dusk architecture recovered; controls remain usable; zero page errors |
 | Responsive and accessibility | No horizontal document overflow; every section reachable; axe WCAG 2/2.1 A/AA reports zero violations in all four viewports |
 
 Viewport coverage: 1440 x 1000 desktop, 390 x 844 mobile portrait, 320 x 740 narrow mobile and 844 x 390 mobile landscape. The fallback journey uses a touch-enabled mobile context with reduced motion and WebGL deliberately disabled.
@@ -41,6 +44,9 @@ The reviewer inspected the actual desktop, portrait, 320 px and landscape screen
 - [Mobile portrait](screenshots/local-mobile.png), [320 px](screenshots/local-narrow-320.png) and [landscape](screenshots/local-mobile-landscape.png)
 - [No WebGL and reduced motion](screenshots/local-mobile-no-webgl-reduced-motion.png)
 - [Paused scene pixel hashes](screenshots/local-visual-hashes.json): nine distinct state hashes. The final capture method temporarily hides text/control overlays so only architectural pixels are compared.
+- [Raw context recovery](screenshots/local-context-recovery.json), [chosen reference](screenshots/local-context-expected-garden-dusk.png) and [restored architecture](screenshots/local-context-restored-garden-dusk.png)
+
+Context recovery compares same-run architecture pixels with motion paused and overlays hidden. An initial strict hash check detected GPU recreation rounding: mean RGB difference 0.01002 on a 0-255 scale, maximum channel difference 1. The prior atrium/morning state differs by 52.73568. The final check permits a mean difference below 1 and requires the restored image to be at least 50 times closer to the latest chosen state than the obsolete prior state. The final targeted pass had zero pixel difference, zero page errors and only the intentional Three.js Context Lost/Restored log messages. PNG decoding uses the browser's 2D Canvas; no image package was added.
 
 ## First CI timing investigation
 
@@ -49,6 +55,12 @@ The first CI run, [40031760467](https://github.com/seoshiro/velora-atelier/actio
 This supports cumulative software-rendering/automation overhead as the cause, rather than a permanently unavailable control. [Compact trace timing data](ci-timing-summary.json) preserves the measured call durations. Bulk downloaded evidence is excluded from the repository.
 
 The integrator set the CI story budget to 120 seconds and added explicit limits of 15 seconds per action and 30 seconds per navigation. Local stories remain at 45 seconds and assertions at 8 seconds. All eight stories, active motion, all nine states, screenshots, accessibility scans and the single worker remain intact. The increased whole-story budget accommodates the measured cumulative work, while explicit per-action limits still expose a stalled control. A new CI run must establish the result; the failed first run is not a release pass.
+
+## Second CI diagnostic investigation
+
+The second run, [40032711531](https://github.com/seoshiro/velora-atelier/actions/runs/40032711531), completed the full normal journey including download in 58.4 seconds and 51.7 seconds on retry. Its strict console assertion failed on four Chrome GL driver performance diagnostics; the other seven stories passed. [Chromium's ANGLE source](https://chromium.googlesource.com/angle/angle/+/b4efc051da9dc884087f1ace8185d410d4349d02/src/libANGLE/renderer/vulkan/vk_helpers.cpp) emits this diagnostic during pixel readback with a GPU finish. Source inspection found no application `readPixels` call. Attribution to automated screen capture is an inference from the diagnostic, the application's rendering path and the trace's screen capture activity.
+
+Installed Playwright 1.64.1 types at `types/test.d.ts:7261` support the revised trace configuration: retained failure traces, DOM and ARIA snapshots and sources, with screencast screenshots and screen snapshots disabled. Every explicit architecture, viewport and mobile PNG remains. Warning capture is still strict: no warning allowlist was added. This change removes repeated trace readback work while keeping actionable failure evidence; a new CI must prove its outcome. The suite now also retains the ninth GPU context recovery scenario.
 
 ## Remaining verification
 

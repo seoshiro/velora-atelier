@@ -79,3 +79,4 @@ jobs:
             playwright-report/
             test-results/
             qa/screenshots/
+            qa/release-verification.json

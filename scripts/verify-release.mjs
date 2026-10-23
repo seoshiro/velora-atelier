@@ -23,5 +23,5 @@ for (const [name, expected] of Object.entries(files)) {
   verified.push({ name, sha256: actual, bytes: data.byteLength })
 }
 const evidence = { url: base.href, verifiedAt: new Date().toISOString(), commit: remote.commit, assets: verified }
-writeFileSync('qa/release-verification.json', JSON.stringify(evidence, null, 2))
+writeFileSync(process.argv[3] || 'qa/release-verification.json', JSON.stringify(evidence, null, 2))
 console.log(`PASS exact commit ${remote.commit}; HTML, favicon and ${verified.length - 2} asset SHA-256 hashes match ${base.href}`)

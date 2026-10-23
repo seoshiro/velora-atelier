@@ -13,4 +13,8 @@
 - Typecheck includes app/tests/config; lint/build and 6 unit tests pass. Nine architecture-only paused screenshot hashes reverified distinct after hiding overlays.
 - Public repository created and pushed at `42590a0781fa7af8b4b334fa0582bc5364f01e79`; Pages configured with workflow source.
 - First CI run `40031760467`: source/build gates passed; 7/8 Chrome browser stories passed. Long all-state/repeated-control journey exceeded 45-second total budget while still progressing. Deployment correctly did not run. Independent trace review pending; no tests shortened.
-- Pending: fix verified CI timing issue, successful Pages deployment, exact-SHA/HTML/all-asset verification and real live suite.
+- Independent trace review measured bounded clicks (maximum 2386 ms) and justified CI total budget 120 seconds with action 15 s/navigation 30 s bounds, retaining the complete suite.
+- Second CI `40032711531` completed the long journey and download but failed its strict console gate on Chrome software GPU ReadPixels diagnostics from trace recording; the other 7 stories passed. Deployment again correctly did not run.
+- Trace now preserves DOM/ARIA/source/action diagnostics without background image readback. Explicit real screenshots and all warnings/assertions remain. Official Actions use exact current release SHAs on pinned Ubuntu 24.04 with preinstalled Chrome.
+- Added ninth actual context-loss/recovery regression: fallback, changes while lost, restored chosen pixels and control verified locally. No application defect found; tiny one-channel GPU recreation noise is bounded explicitly.
+- Pending: successful Pages deployment, exact-SHA/HTML/all-asset verification and real live suite.
