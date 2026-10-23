@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { createHash } from 'node:crypto'
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { LIGHTS, SPACES } from '../src/model.ts'
+import { isLinuxCiChromeReadbackDiagnostic } from './consolePolicy.ts'
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:4317/velora-atelier/'
 const prefix = process.env.QA_PREFIX || (base.startsWith('http://127.0.0.1') ? 'local' : 'live')
@@ -26,12 +27,21 @@ const capture = async (page: Page, name: string) => {
   await page.screenshot({ path: `qa/screenshots/${prefix}-${name}.png`, fullPage: true, animations: 'disabled' })
 }
 
-test('three spaces, all light states, interrupted changes and an honest SVG download', async ({ page }) => {
+test('three spaces, all light states, interrupted changes and an honest SVG download', async ({ page, browser }, testInfo) => {
   const failures: string[] = []
+  const browserVersion = browser.version()
+  const classificationContext = { ci: Boolean(process.env.CI), platform: process.platform, browserName: browser.browserType().name(), browserVersion, channel: testInfo.project.use.channel }
+  const driverDiagnostics: { type: string; text: string; location: { url: string; lineNumber: number; columnNumber: number }; browserVersion: string }[] = []
+  let glInfo: Record<string, unknown> = { unavailable: 'The story did not reach driver metadata collection.' }
   page.on('pageerror', error => failures.push(`pageerror: ${error.message}`))
-  page.on('console', message => { if (['error', 'warning'].includes(message.type())) failures.push(`console ${message.type()}: ${message.text()}`) })
+  page.on('console', message => {
+    if (isLinuxCiChromeReadbackDiagnostic(message.type(), message.text(), classificationContext)) {
+      driverDiagnostics.push({ type: message.type(), text: message.text(), location: message.location(), browserVersion })
+    } else if (['error', 'warning'].includes(message.type())) failures.push(`console ${message.type()}: ${message.text()}`)
+  })
   page.on('requestfailed', request => failures.push(`requestfailed: ${request.url()} ${request.failure()?.errorText}`))
   page.on('response', response => { if (response.status() >= 400) failures.push(`HTTP ${response.status()}: ${response.url()}`) })
+  try {
   await open(page)
   await expect(page.locator('.velora-scene')).toHaveAttribute('data-renderer', 'webgl')
   await expect(page.getByText(/fictional/i).first()).toBeVisible()
@@ -66,7 +76,25 @@ test('three spaces, all light states, interrupted changes and an honest SVG down
   expect(card).toMatch(/fictional/i)
   expect(card).toMatch(/^<svg /)
   expect(card).not.toMatch(/<script|<foreignObject|\son\w+=|https?:\/\/(?!www\.w3\.org)/i)
+  glInfo = await page.locator('.velora-scene canvas').evaluate(canvas => {
+    const context = (canvas as HTMLCanvasElement).getContext('webgl2')
+    if (!context) return { unavailable: 'WebGL2 context missing at end of story.' }
+    const debug = context.getExtension('WEBGL_debug_renderer_info')
+    return {
+      version: context.getParameter(context.VERSION), shadingLanguageVersion: context.getParameter(context.SHADING_LANGUAGE_VERSION),
+      vendor: context.getParameter(context.VENDOR), renderer: context.getParameter(context.RENDERER),
+      unmaskedVendor: debug ? context.getParameter(debug.UNMASKED_VENDOR_WEBGL) : null,
+      unmaskedRenderer: debug ? context.getParameter(debug.UNMASKED_RENDERER_WEBGL) : null,
+    }
+  })
+  expect(driverDiagnostics.length, 'the exact classified Linux CI driver diagnostic must remain bounded').toBeLessThanOrEqual(4)
   expect(failures).toEqual([])
+  } finally {
+    const diagnosticReport = JSON.stringify({ classificationContext, browserVersion, glInfo, count: driverDiagnostics.length, limit: 4, diagnostics: driverDiagnostics, failures }, null, 2)
+    await mkdir('qa/screenshots', { recursive: true })
+    await writeFile(`qa/screenshots/${prefix}-console-diagnostics.json`, diagnosticReport)
+    await testInfo.attach('browser-console-diagnostics', { body: diagnosticReport, contentType: 'application/json' })
+  }
 })
 
 test('query state survives Back, Forward, reload and invalid direct inputs', async ({ page }) => {

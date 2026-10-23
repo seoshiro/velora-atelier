@@ -18,8 +18,8 @@ export default defineConfig({
     channel: process.env.CI ? 'chrome' : undefined,
     actionTimeout: 15000,
     navigationTimeout: 30000,
-    // Background trace screencasting stalls software WebGL with ReadPixels on CI.
-    // Preserve action/DOM/ARIA/source traces and all explicitly captured real screenshots.
+    // Reduce optional screen readback overhead; the driver warning's exact cause is not isolated.
+    // Preserve action/DOM/ARIA/source traces and every explicitly captured real screenshot.
     trace: { mode: 'retain-on-failure', screenshots: false, snapshots: { dom: true, aria: true, screen: false }, sources: true },
     screenshot: 'only-on-failure',
     launchOptions: {
