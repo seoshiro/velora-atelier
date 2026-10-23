@@ -1,0 +1,219 @@
+import { expect, test, type Page } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+import { createHash } from 'node:crypto'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { LIGHTS, SPACES } from '../src/model.ts'
+
+const base = process.env.BASE_URL || 'http://127.0.0.1:4317/velora-atelier/'
+const prefix = process.env.QA_PREFIX || (base.startsWith('http://127.0.0.1') ? 'local' : 'live')
+const open = async (page: Page, query = '') => {
+  await page.goto(`${base}${query}`, { waitUntil: 'networkidle' })
+  await page.evaluate(() => document.fonts.ready)
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+}
+const assertSelection = async (page: Page, spaceId: string, lightId: string) => {
+  const space = SPACES.find(item => item.id === spaceId)!
+  const light = LIGHTS.find(item => item.id === lightId)!
+  await expect(page.getByRole('button', { name: `Explore ${space.number} ${space.title}`, exact: true })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByRole('button', { name: light.label, exact: true })).toHaveAttribute('aria-pressed', 'true')
+}
+const noOverflow = async (page: Page) => {
+  const sizes = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }))
+  expect(sizes.document, `horizontal overflow: document ${sizes.document}px, viewport ${sizes.viewport}px`).toBeLessThanOrEqual(sizes.viewport + 1)
+}
+const capture = async (page: Page, name: string) => {
+  await mkdir('qa/screenshots', { recursive: true })
+  await page.screenshot({ path: `qa/screenshots/${prefix}-${name}.png`, fullPage: true, animations: 'disabled' })
+}
+
+test('three spaces, all light states, interrupted changes and an honest SVG download', async ({ page }) => {
+  const failures: string[] = []
+  page.on('pageerror', error => failures.push(`pageerror: ${error.message}`))
+  page.on('console', message => { if (['error', 'warning'].includes(message.type())) failures.push(`console ${message.type()}: ${message.text()}`) })
+  page.on('requestfailed', request => failures.push(`requestfailed: ${request.url()} ${request.failure()?.errorText}`))
+  page.on('response', response => { if (response.status() >= 400) failures.push(`HTTP ${response.status()}: ${response.url()}`) })
+  await open(page)
+  await expect(page.locator('.velora-scene')).toHaveAttribute('data-renderer', 'webgl')
+  await expect(page.getByText(/fictional/i).first()).toBeVisible()
+  for (const space of SPACES) {
+    await page.getByRole('button', { name: `Explore ${space.number} ${space.title}`, exact: true }).click()
+    for (const light of LIGHTS) {
+      await page.getByRole('button', { name: light.label, exact: true }).click()
+      await assertSelection(page, space.id, light.id)
+      expect(new URL(page.url()).searchParams.get('space') ?? 'atrium').toBe(space.id)
+      expect(new URL(page.url()).searchParams.get('light') ?? 'morning').toBe(light.id)
+      if ((space.id === 'atrium' && light.id === 'morning') || (space.id === 'water' && light.id === 'noon') || (space.id === 'garden' && light.id === 'dusk')) {
+        await mkdir('qa/screenshots', { recursive: true })
+        await page.locator('.scene-frame').screenshot({ path: `qa/screenshots/${prefix}-scene-${space.id}-${light.id}.png`, animations: 'disabled' })
+      }
+    }
+  }
+  // Deliberately reverse an in-flight selection before the visual transition settles.
+  for (const space of [SPACES[0], SPACES[2], SPACES[1], SPACES[0], SPACES[1]]) {
+    await page.getByRole('button', { name: `Explore ${space.number} ${space.title}`, exact: true }).click()
+  }
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).click()
+  await assertSelection(page, 'water', 'dusk')
+  const downloaded = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Download design card', exact: true }).click()
+  const download = await downloaded
+  expect(download.suggestedFilename()).toBe('velora-water-dusk.svg')
+  const downloadPath = await download.path()
+  expect(downloadPath).toBeTruthy()
+  const card = await readFile(downloadPath!, 'utf8')
+  expect(card).toContain('Water Court')
+  expect(card).toContain('Dusk')
+  expect(card).toMatch(/fictional/i)
+  expect(card).toMatch(/^<svg /)
+  expect(card).not.toMatch(/<script|<foreignObject|\son\w+=|https?:\/\/(?!www\.w3\.org)/i)
+  expect(failures).toEqual([])
+})
+
+test('query state survives Back, Forward, reload and invalid direct inputs', async ({ page }) => {
+  await open(page, '?space=atrium&light=morning')
+  await page.getByRole('button', { name: `Explore ${SPACES[1].number} ${SPACES[1].title}`, exact: true }).click()
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).click()
+  await assertSelection(page, 'water', 'dusk')
+  await page.goBack()
+  await assertSelection(page, 'water', 'morning')
+  await page.goBack()
+  await assertSelection(page, 'atrium', 'morning')
+  await page.goForward()
+  await assertSelection(page, 'water', 'morning')
+  await page.goForward()
+  await assertSelection(page, 'water', 'dusk')
+  await page.reload({ waitUntil: 'networkidle' })
+  await assertSelection(page, 'water', 'dusk')
+  await open(page, '?space=%3Cscript%3E&light=midnight#explore')
+  await assertSelection(page, 'atrium', 'morning')
+  await page.getByRole('button', { name: `Explore ${SPACES[2].number} ${SPACES[2].title}`, exact: true }).click()
+  expect(new URL(page.url()).hash).toBe('#explore')
+  await expect(page.locator('script:not([src])')).toHaveCount(0)
+})
+
+test('navigation, collection entries and every section are usable', async ({ page }) => {
+  await open(page)
+  for (const [name, hash] of [['Spaces', '#spaces'], ['Philosophy', '#philosophy'], ['Design notes', '#notes']]) {
+    await page.getByRole('link', { name: name === 'Spaces' ? /^Spaces/ : name, exact: name !== 'Spaces' }).first().click()
+    await expect(page).toHaveURL(new RegExp(`${hash}$`))
+    await expect(page.locator(hash)).toBeInViewport()
+  }
+  await page.getByRole('link', { name: /^Spaces/ }).first().click()
+  for (const space of SPACES) {
+    await page.getByRole('button', { name: `Enter V / ${space.number} ${space.title}`, exact: true }).click()
+    await assertSelection(page, space.id, 'morning')
+    await expect(page.getByRole('button', { name: `Explore ${space.number} ${space.title}`, exact: true })).toBeFocused()
+    await expect(page.locator('#explore')).toBeInViewport()
+    await page.locator('#spaces').scrollIntoViewIfNeeded()
+  }
+  await page.locator('footer').scrollIntoViewIfNeeded()
+  await expect(page.locator('footer')).toBeVisible()
+  await noOverflow(page)
+})
+
+test('keyboard controls have names, visible focus and a functional motion switch', async ({ page }) => {
+  await open(page)
+  await page.keyboard.press('Tab')
+  const firstFocus = page.locator(':focus')
+  await expect(firstFocus).toBeVisible()
+  await expect(firstFocus).toHaveAccessibleName(/.+/)
+  const space = page.getByRole('button', { name: `Explore ${SPACES[2].number} ${SPACES[2].title}`, exact: true })
+  await space.focus()
+  const style = await space.evaluate(element => {
+    const computed = getComputedStyle(element)
+    return { outline: computed.outlineStyle, width: computed.outlineWidth, shadow: computed.boxShadow }
+  })
+  expect((style.outline !== 'none' && style.width !== '0px') || style.shadow !== 'none').toBe(true)
+  await page.keyboard.press('Enter')
+  await assertSelection(page, 'garden', 'morning')
+  await page.getByRole('button', { name: 'Pause spatial motion', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Enable spatial motion', exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Enable spatial motion', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Pause spatial motion', exact: true })).toBeVisible()
+})
+
+test('reduced motion and unavailable WebGL retain the full story', async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: 'reduce', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true })
+  await context.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...args: unknown[]) {
+      if (/webgl/i.test(type)) return null
+      return Reflect.apply(original, this, [type, ...args])
+    } as typeof original
+  })
+  const page = await context.newPage()
+  await open(page)
+  await expect(page.getByRole('button', { name: 'Reduced motion: disabled by system preference', exact: true })).toBeDisabled()
+  await expect(page.locator('.velora-scene')).toHaveAttribute('data-renderer', 'illustration')
+  await expect(page.locator('.velora-scene > .architecture-art')).toBeVisible()
+  const morningArt = await page.locator('.velora-scene > .architecture-art').innerHTML()
+  await page.getByRole('button', { name: LIGHTS[1].label, exact: true }).tap()
+  await assertSelection(page, 'atrium', 'noon')
+  expect(await page.locator('.velora-scene > .architecture-art').innerHTML()).not.toBe(morningArt)
+  await page.getByRole('button', { name: `Explore ${SPACES[1].number} ${SPACES[1].title}`, exact: true }).tap()
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).tap()
+  await assertSelection(page, 'water', 'dusk')
+  await expect(page.getByRole('button', { name: 'Download design card', exact: true })).toBeVisible()
+  await noOverflow(page)
+  await capture(page, 'mobile-no-webgl-reduced-motion')
+  await context.close()
+})
+
+test('all nine architectural and light states produce distinct real scene pixels', async ({ page }) => {
+  await open(page)
+  await expect(page.locator('.velora-scene')).toHaveAttribute('data-renderer', 'webgl')
+  await page.getByRole('button', { name: 'Pause spatial motion', exact: true }).click()
+  await expect(page.getByRole('button', { name: 'Enable spatial motion', exact: true })).toBeVisible()
+  await mkdir('qa/screenshots', { recursive: true })
+  const hashes: Record<string, string> = {}
+  for (const space of SPACES) {
+    await page.getByRole('button', { name: `Explore ${space.number} ${space.title}`, exact: true }).click()
+    for (const light of LIGHTS) {
+      await page.getByRole('button', { name: light.label, exact: true }).click()
+      await assertSelection(page, space.id, light.id)
+      const scene = page.locator('.velora-scene')
+      await expect(scene).toHaveAttribute('data-space', space.id)
+      await expect(scene).toHaveAttribute('data-light', light.id)
+      const state = `${space.id}-${light.id}`
+      const pixels = await scene.screenshot({ path: `qa/screenshots/${prefix}-paused-${state}.png`, animations: 'disabled', style: '.scene-topline,.scene-title,.scene-caption,.light-control{visibility:hidden!important}' })
+      hashes[state] = createHash('sha256').update(pixels).digest('hex')
+    }
+  }
+  await writeFile(`qa/screenshots/${prefix}-visual-hashes.json`, JSON.stringify({ motion: 'paused', renderer: 'webgl', hashes }, null, 2))
+  expect(new Set(Object.values(hashes)).size).toBe(9)
+})
+
+test('an interrupted optional scene chunk preserves controls, text and card export', async ({ page }) => {
+  await page.route(/\/assets\/Scene-[^/]+\.js$/, route => route.abort('failed'))
+  await open(page)
+  await expect(page.locator('.scene-frame .architecture-art')).toBeVisible()
+  await page.getByRole('button', { name: `Explore ${SPACES[2].number} ${SPACES[2].title}`, exact: true }).click()
+  await page.getByRole('button', { name: LIGHTS[2].label, exact: true }).click()
+  await assertSelection(page, 'garden', 'dusk')
+  const downloaded = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Download design card', exact: true }).click()
+  expect((await downloaded).suggestedFilename()).toBe('velora-garden-dusk.svg')
+})
+
+test('responsive layouts and accessibility: desktop, mobile, 320px and landscape', async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 1000, name: 'desktop' },
+    { width: 390, height: 844, name: 'mobile' },
+    { width: 320, height: 740, name: 'narrow-320' },
+    { width: 844, height: 390, name: 'mobile-landscape' },
+  ]) {
+    await page.setViewportSize(viewport)
+    await open(page)
+    await noOverflow(page)
+    for (const section of ['#explore', '#spaces', '#philosophy', '#notes']) {
+      await page.locator(section).scrollIntoViewIfNeeded()
+      await expect(page.locator(section)).toBeVisible()
+      await noOverflow(page)
+    }
+    await page.evaluate(() => scrollTo(0, 0))
+    await capture(page, viewport.name)
+    if (viewport.name === 'desktop') await page.locator('.hero').screenshot({ path: `qa/screenshots/${prefix}-desktop-hero.png`, animations: 'disabled' })
+    const accessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()
+    expect.soft(accessibility.violations.map(issue => ({ id: issue.id, impact: issue.impact, nodes: issue.nodes.map(node => node.target) })), `WCAG scan at ${viewport.width} × ${viewport.height}`).toEqual([])
+  }
+})

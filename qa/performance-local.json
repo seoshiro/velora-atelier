@@ -1,0 +1,435 @@
+{
+  "timestamp": "2026-10-23T22:04:49.050Z",
+  "url": "http://127.0.0.1:4317/velora-atelier/",
+  "conditions": {
+    "browser": "156.0.8078.4",
+    "platform": "win32",
+    "headless": true,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "deviceScaleFactor": 1,
+    "cpuThrottle": 4,
+    "network": "unthrottled",
+    "cache": "new context per trial",
+    "workers": 1,
+    "observationMilliseconds": 3000
+  },
+  "trials": [
+    {
+      "trial": 1,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 4.599999997764826,
+        "domContentLoaded": 223.09999999776483,
+        "load": 229.19999999925494,
+        "transferSize": 984
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 252
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 1124
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 1124,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 91.09999999776483,
+            "duration": 140
+          },
+          {
+            "startTime": 239.09999999776483,
+            "duration": 133
+          },
+          {
+            "startTime": 1246.0999999977648,
+            "duration": 721
+          }
+        ],
+        "sceneReadyTime": 2010.699999999255
+      },
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-BJQ7GbOV.js",
+          "type": "script",
+          "duration": 22.699999999254942,
+          "transferSize": 77805,
+          "encodedBodySize": 77505,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 10.5,
+          "transferSize": 4850,
+          "encodedBodySize": 4550,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-BOpiNcFK.js",
+          "type": "script",
+          "duration": 23.900000002235174,
+          "transferSize": 145270,
+          "encodedBodySize": 144970,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 2.800000000745058,
+          "transferSize": 1119,
+          "encodedBodySize": 819,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 550.1999999992549,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 549.5999999977648,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 549.3000000007451,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 2.300000000745058,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 8,
+        "RecalcStyleCount": 137,
+        "ScriptDuration": 1.393772,
+        "TaskDuration": 2.744529,
+        "JSHeapUsedSize": 6691732,
+        "JSHeapTotalSize": 11010048
+      },
+      "pageErrors": [],
+      "consoleMessages": [
+        {
+          "type": "warning",
+          "text": "THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+        }
+      ],
+      "failedRequests": [],
+      "httpErrors": []
+    },
+    {
+      "trial": 2,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 3.800000000745058,
+        "domContentLoaded": 258.19999999925494,
+        "load": 259.19999999925494,
+        "transferSize": 984
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 108
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 1076
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 1076,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 102.39999999850988,
+            "duration": 158
+          },
+          {
+            "startTime": 268.6000000014901,
+            "duration": 159
+          },
+          {
+            "startTime": 1337.300000000745,
+            "duration": 461
+          }
+        ],
+        "sceneReadyTime": 1833.6000000014901
+      },
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-BJQ7GbOV.js",
+          "type": "script",
+          "duration": 24.900000002235174,
+          "transferSize": 77805,
+          "encodedBodySize": 77505,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 13.199999999254942,
+          "transferSize": 4850,
+          "encodedBodySize": 4550,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-BOpiNcFK.js",
+          "type": "script",
+          "duration": 25.800000000745058,
+          "transferSize": 145270,
+          "encodedBodySize": 144970,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 3.100000001490116,
+          "transferSize": 1119,
+          "encodedBodySize": 819,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 582.7000000029802,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 581.5,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 581.1000000014901,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 3.300000000745058,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 8,
+        "RecalcStyleCount": 138,
+        "ScriptDuration": 1.230071,
+        "TaskDuration": 2.691273,
+        "JSHeapUsedSize": 7063576,
+        "JSHeapTotalSize": 11796480
+      },
+      "pageErrors": [],
+      "consoleMessages": [
+        {
+          "type": "warning",
+          "text": "THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+        }
+      ],
+      "failedRequests": [],
+      "httpErrors": []
+    },
+    {
+      "trial": 3,
+      "title": "VELORA — Spaces to slow down",
+      "sceneRenderer": "webgl",
+      "webglCanvases": 1,
+      "documentWidth": 1440,
+      "viewportWidth": 1440,
+      "domNodes": 453,
+      "navigation": {
+        "responseStart": 3.899999998509884,
+        "domContentLoaded": 217.59999999776483,
+        "load": 218.5,
+        "transferSize": 984
+      },
+      "paints": [
+        {
+          "name": "first-paint",
+          "startTime": 96
+        },
+        {
+          "name": "first-contentful-paint",
+          "startTime": 888
+        }
+      ],
+      "observed": {
+        "lcp": [
+          {
+            "startTime": 888,
+            "size": 230510,
+            "element": "H1"
+          }
+        ],
+        "cls": 0.006521906271098572,
+        "longTasks": [
+          {
+            "startTime": 86.09999999776483,
+            "duration": 133
+          },
+          {
+            "startTime": 225.89999999850988,
+            "duration": 116
+          },
+          {
+            "startTime": 1103.5,
+            "duration": 425
+          }
+        ],
+        "sceneReadyTime": 1559.699999999255
+      },
+      "resources": [
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-BJQ7GbOV.js",
+          "type": "script",
+          "duration": 23.900000002235174,
+          "transferSize": 77805,
+          "encodedBodySize": 77505,
+          "decodedBodySize": 248231
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/index-C27FxPnt.css",
+          "type": "link",
+          "duration": 11.800000000745058,
+          "transferSize": 4850,
+          "encodedBodySize": 4550,
+          "decodedBodySize": 17459
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-BOpiNcFK.js",
+          "type": "script",
+          "duration": 22.300000000745058,
+          "transferSize": 145270,
+          "encodedBodySize": 144970,
+          "decodedBodySize": 571871
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/Scene-ovwgmY27.css",
+          "type": "link",
+          "duration": 3.100000001490116,
+          "transferSize": 1119,
+          "encodedBodySize": 819,
+          "decodedBodySize": 819
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/dm-sans-latin-400-normal-CW0RaeGs.woff2",
+          "type": "css",
+          "duration": 499.6000000014901,
+          "transferSize": 14500,
+          "encodedBodySize": 14200,
+          "decodedBodySize": 14200
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-normal-B-1hWBU7.woff2",
+          "type": "css",
+          "duration": 498.9000000022352,
+          "transferSize": 23176,
+          "encodedBodySize": 22876,
+          "decodedBodySize": 22876
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/assets/cormorant-garamond-latin-400-italic-Dc_OZ8oc.woff2",
+          "type": "css",
+          "duration": 498.5,
+          "transferSize": 23960,
+          "encodedBodySize": 23660,
+          "decodedBodySize": 23660
+        },
+        {
+          "name": "http://127.0.0.1:4317/velora-atelier/favicon.svg",
+          "type": "other",
+          "duration": 2.600000001490116,
+          "transferSize": 514,
+          "encodedBodySize": 214,
+          "decodedBodySize": 214
+        }
+      ],
+      "metrics": {
+        "Documents": 6,
+        "Nodes": 653,
+        "LayoutCount": 8,
+        "RecalcStyleCount": 138,
+        "ScriptDuration": 1.130447,
+        "TaskDuration": 2.464551,
+        "JSHeapUsedSize": 6864544,
+        "JSHeapTotalSize": 11534336
+      },
+      "pageErrors": [],
+      "consoleMessages": [
+        {
+          "type": "warning",
+          "text": "THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+        }
+      ],
+      "failedRequests": [],
+      "httpErrors": []
+    }
+  ],
+  "lifecycle": {
+    "observationMilliseconds": 1000,
+    "settleMilliseconds": 500,
+    "activeFrames": 146,
+    "pausedFrames": 0,
+    "offscreenFrames": 0,
+    "reducedFrames": 0,
+    "pass": true
+  }
+}
