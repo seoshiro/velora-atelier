@@ -28,6 +28,7 @@ function App() {
   const [downloadStatus, setDownloadStatus] = useState('')
   const current = SPACES.find(item => item.id === space)!
   const currentLight = LIGHTS.find(item => item.id === light)!
+  const sceneHint = reducedMotion ? 'Still by preference. Follow the light.' : motion ? 'Move your pointer. Let the space unfold.' : 'Motion paused. Follow the light.'
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -43,19 +44,26 @@ function App() {
   }
 
   function downloadCard() {
+    let url: string | undefined
+    let anchor: HTMLAnchorElement | undefined
+    let launched = false
     try {
       const blob = new Blob([createDesignCard({ space, light })], { type: 'image/svg+xml;charset=utf-8' })
-      const url = URL.createObjectURL(blob)
-      const anchor = document.createElement('a')
+      url = URL.createObjectURL(blob)
+      anchor = document.createElement('a')
       anchor.href = url
       anchor.download = designCardFilename({ space, light })
       document.body.appendChild(anchor)
       anchor.click()
-      anchor.remove()
-      window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+      launched = true
+      const downloadUrl = url
+      window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000)
       setDownloadStatus(`Design card prepared: ${current.title}, ${currentLight.label}. SVG image, free to keep.`)
     } catch {
       setDownloadStatus('The card could not be prepared. Please try again in a browser that supports file downloads.')
+    } finally {
+      anchor?.remove()
+      if (url && !launched) URL.revokeObjectURL(url)
     }
   }
 
@@ -76,7 +84,7 @@ function App() {
             <SceneBoundary fallback={<ArchitectureArt space={space} light={light} className="scene-loading-art" />}><Suspense fallback={<ArchitectureArt space={space} light={light} className="scene-loading-art" />}><Scene space={space} light={light} motion={motion}/></Suspense></SceneBoundary>
             <div className="scene-topline"><span>VELORA / SPATIAL STUDY {current.number}</span><button className="motion-control" onClick={() => setMotion(value => !value)} disabled={reducedMotion} aria-label={reducedMotion ? 'Reduced motion: disabled by system preference' : motion ? 'Pause spatial motion' : 'Enable spatial motion'} aria-pressed={motion}><svg viewBox="0 0 12 12" aria-hidden="true" fill="none"><path d={motion ? 'M4 2v8M8 2v8' : 'm3 2 7 4-7 4Z'} stroke="currentColor" strokeWidth="1"/></svg>{reducedMotion ? 'Reduced motion' : motion ? 'Pause spatial motion' : 'Enable spatial motion'}</button></div>
             <div className="scene-title"><span className="eyebrow">{current.subtitle}</span><h2>{current.title}</h2></div>
-            <div className="scene-caption"><span className="coordinate-cross" aria-hidden="true">+</span><span>Original digital architecture<br/>Move your pointer. Let the space unfold.</span></div>
+            <div className="scene-caption"><span className="coordinate-cross" aria-hidden="true">+</span><span>Original digital architecture<br/>{sceneHint}</span></div>
             <div className="light-control" role="group" aria-label="Time of day"><span className="light-label">Follow the light</span>{LIGHTS.map(item => <button key={item.id} aria-pressed={light === item.id} onClick={() => setLight(item.id)} aria-label={item.label}><span className={`sun-icon sun-${item.id}`} aria-hidden="true"/><span>{item.label}</span></button>)}</div>
           </div>
           <div className="experience-bottom"><div className="space-switcher" role="group" aria-label="Choose a space">{SPACES.map(item => <button id={`space-${item.id}`} key={item.id} className={space === item.id ? 'selected' : ''} aria-label={`Explore ${item.number} ${item.title}`} aria-pressed={space === item.id} onClick={() => setSpace(item.id)}><span className="tab-number" aria-hidden="true">{item.number}</span>{' '}<span>{item.title}</span><Arrow /></button>)}</div><span className="experience-note">Three spaces.<br/>One slower rhythm.</span></div>

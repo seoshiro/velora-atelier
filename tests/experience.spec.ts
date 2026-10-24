@@ -156,6 +156,7 @@ test('keyboard controls have names, visible focus and a functional motion switch
   await assertSelection(page, 'garden', 'morning')
   await page.getByRole('button', { name: 'Pause spatial motion', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Enable spatial motion', exact: true })).toBeVisible()
+  await expect(page.locator('.scene-caption')).toContainText('Motion paused. Follow the light.')
   await page.getByRole('button', { name: 'Enable spatial motion', exact: true }).click()
   await expect(page.getByRole('button', { name: 'Pause spatial motion', exact: true })).toBeVisible()
 })
@@ -172,6 +173,7 @@ test('reduced motion and unavailable WebGL retain the full story', async ({ brow
   const page = await context.newPage()
   await open(page)
   await expect(page.getByRole('button', { name: 'Reduced motion: disabled by system preference', exact: true })).toBeDisabled()
+  await expect(page.locator('.scene-caption')).toContainText('Still by preference. Follow the light.')
   await expect(page.locator('.velora-scene')).toHaveAttribute('data-renderer', 'illustration')
   await expect(page.locator('.velora-scene > .architecture-art')).toBeVisible()
   const morningArt = await page.locator('.velora-scene > .architecture-art').innerHTML()
@@ -356,6 +358,42 @@ test('offscreen and hidden changes defer GPU draws until the scene is visible', 
     document.dispatchEvent(new Event('visibilitychange'))
   })
   await expect.poll(draws).toBeGreaterThan(hidden)
+})
+
+test('failed card downloads release their URL and temporary anchor, then allow retry', async ({ page }) => {
+  await page.addInitScript(() => {
+    const active = new Set<string>()
+    const state = { failure: 'append', active }
+    Object.assign(window, { __cardFailureQA: state })
+    const create = URL.createObjectURL.bind(URL)
+    const revoke = URL.revokeObjectURL.bind(URL)
+    URL.createObjectURL = blob => { const url = create(blob); active.add(url); return url }
+    URL.revokeObjectURL = url => { active.delete(url); revoke(url) }
+    const append = Node.prototype.appendChild
+    Node.prototype.appendChild = function <T extends Node>(child: T): T {
+      if (state.failure === 'append' && child instanceof HTMLAnchorElement && child.download.startsWith('velora-')) throw new Error('Injected append failure')
+      return append.call(this, child) as T
+    }
+    const click = HTMLAnchorElement.prototype.click
+    HTMLAnchorElement.prototype.click = function () {
+      if (state.failure === 'click' && this.download.startsWith('velora-')) throw new Error('Injected click failure')
+      click.call(this)
+    }
+  })
+  await open(page)
+  for (const failure of ['append', 'click', 'click']) {
+    await page.evaluate(value => { (window as unknown as { __cardFailureQA: { failure: string } }).__cardFailureQA.failure = value }, failure)
+    await page.getByRole('button', { name: 'Download design card' }).click()
+    await expect(page.locator('.download-status')).toContainText('could not be prepared')
+    expect(await page.evaluate(() => (window as unknown as { __cardFailureQA: { active: Set<string> } }).__cardFailureQA.active.size)).toBe(0)
+    await expect(page.locator('a[download]')).toHaveCount(0)
+  }
+  await page.evaluate(() => { (window as unknown as { __cardFailureQA: { failure: string } }).__cardFailureQA.failure = '' })
+  const downloaded = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Download design card' }).click()
+  expect((await downloaded).suggestedFilename()).toBe('velora-atrium-morning.svg')
+  await expect(page.locator('a[download]')).toHaveCount(0)
+  await expect.poll(() => page.evaluate(() => (window as unknown as { __cardFailureQA: { active: Set<string> } }).__cardFailureQA.active.size)).toBe(0)
 })
 
 test('responsive layouts and accessibility: desktop, mobile, 320px and landscape', async ({ page }) => {

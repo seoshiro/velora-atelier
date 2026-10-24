@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import ArchitectureArt, { type LightId, type SpaceId } from './ArchitectureArt'
+import treeModels from './art/garden-trees.json'
 import './scene.css'
 
 type SceneProps = { space: SpaceId; light: LightId; motion: boolean }
@@ -66,13 +67,19 @@ function box(w: number, h: number, d: number, material: THREE.Material, x: numbe
   return mesh
 }
 
-function cypress(material: THREE.Material, trunkMaterial: THREE.Material, x: number, z: number, scale = 1) {
+/** Indexed meshes and smooth normals authored and exported in Blender 5.2. */
+function gardenTree(kind: 'cypress' | 'olive', material: THREE.Material, trunkMaterial: THREE.Material, x: number, z: number, scale = 1) {
   const tree = new THREE.Group()
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(.055, .09, 2.8, 8), trunkMaterial)
-  trunk.position.y = 1.5; tree.add(trunk)
-  const crown = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 14), material)
-  crown.scale.set(.48, 1.5, .48); crown.position.y = 2.8; crown.castShadow = true
-  tree.add(crown); tree.position.set(x, .2, z); tree.scale.setScalar(scale)
+  for (const part of treeModels.models[kind]) {
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(Float32Array.from(part.positions, value => value / treeModels.positionScale), 3))
+    geometry.setAttribute('normal', new THREE.BufferAttribute(Float32Array.from(part.normals, value => value / treeModels.normalScale), 3))
+    geometry.setIndex(part.indices)
+    const mesh = new THREE.Mesh(geometry, part.material === 'foliage' ? material : trunkMaterial)
+    mesh.castShadow = mesh.receiveShadow = true
+    tree.add(mesh)
+  }
+  tree.position.set(x, .2, z); tree.scale.setScalar(scale)
   return tree
 }
 
@@ -123,7 +130,7 @@ export default function Scene(props: SceneProps) {
     const limestone = new THREE.MeshStandardMaterial({ color: '#d9c6a5', map: texture, roughness: .9, metalness: 0 })
     const paleStone = new THREE.MeshStandardMaterial({ color: '#e6d8b9', map: texture, roughness: .85 })
     const shadowStone = new THREE.MeshStandardMaterial({ color: '#b3a187', map: texture, roughness: 1 })
-    const foliage = new THREE.MeshStandardMaterial({ color: '#596a4d', roughness: 1, flatShading: true })
+    const foliage = new THREE.MeshStandardMaterial({ color: '#596a4d', roughness: 1 })
     const trunk = new THREE.MeshStandardMaterial({ color: '#6b6044', roughness: 1 })
     const groundMaterial = new THREE.MeshStandardMaterial({ color: lightPalettes.morning.ground, roughness: 1 })
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(180, 180), groundMaterial)
@@ -163,8 +170,8 @@ export default function Scene(props: SceneProps) {
     for (let i = 0; i < 4; i++) architecture.add(box(3.9, .16 * (4 - i), .7, paleStone, -4.9, -.18 + .08 * (4 - i), 3.55 + i * .7))
     // A low sitting wall anchors the right-hand edge of the water.
     architecture.add(box(.5, .68, 4.2, limestone, 5.75, .35, 1.7))
-    architecture.add(cypress(foliage, trunk, 4.4, 3.4, 1.08))
-    architecture.add(cypress(foliage, trunk, -5.3, -4.9, .75))
+    architecture.add(gardenTree('cypress', foliage, trunk, 4.4, 3.4, 1.08))
+    architecture.add(gardenTree('cypress', foliage, trunk, -5.3, -4.9, .75))
 
     const spaces: Record<SpaceId, THREE.Group> = { atrium: new THREE.Group(), water: new THREE.Group(), garden: new THREE.Group() }
     Object.values(spaces).forEach(group => architecture.add(group))
@@ -185,15 +192,7 @@ export default function Scene(props: SceneProps) {
       const x = -3.5 + i * 1.15
       spaces.garden.add(box(.15, 3.55, .17, paleStone, x, 1.97, 1.2), box(.18, .22, 6, paleStone, x, 3.85, -1.45))
     }
-    const olive = new THREE.Group()
-    const oliveTrunk = new THREE.Mesh(new THREE.CylinderGeometry(.08, .17, 2.4, 8), trunk)
-    oliveTrunk.position.y = 1.35; oliveTrunk.rotation.z = -.1; olive.add(oliveTrunk)
-    for (let i = 0; i < 5; i++) {
-      const leaf = new THREE.Mesh(new THREE.IcosahedronGeometry(.8, 1), foliage)
-      leaf.position.set(Math.sin(i * 2.4) * .6, 2.9 + Math.sin(i) * .3, Math.cos(i * 2.4) * .5)
-      leaf.scale.set(1, .8, .9); leaf.castShadow = true; olive.add(leaf)
-    }
-    olive.position.set(3.4, .2, -1.1); spaces.garden.add(olive)
+    spaces.garden.add(gardenTree('olive', foliage, trunk, 3.4, -1.1))
 
     const render = () => {
       if (disposed || lost || !inView || document.hidden) return

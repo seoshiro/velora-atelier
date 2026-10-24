@@ -1,6 +1,31 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { createDesignCard, designCardFilename, experienceSearch, LIGHTS, parseExperience, SPACES } from './model.ts'
+
+test('Blender tree exports have bounded topology, valid indices and usable smooth normals', () => {
+  const data = JSON.parse(readFileSync(new URL('./art/garden-trees.json', import.meta.url), 'utf8')) as {
+    positionScale: number; normalScale: number;
+    models: Record<string, { material: string; positions: number[]; normals: number[]; indices: number[] }[]>;
+  }
+  assert.deepEqual(Object.keys(data.models).sort(), ['cypress', 'olive'])
+  let triangles = 0
+  for (const parts of Object.values(data.models)) for (const part of parts) {
+    assert.ok(['trunk', 'foliage'].includes(part.material))
+    assert.equal(part.positions.length % 3, 0)
+    assert.equal(part.normals.length, part.positions.length)
+    assert.equal(part.indices.length % 3, 0)
+    assert.ok(part.positions.every(value => Number.isInteger(value) && Math.abs(value) <= 32767))
+    assert.ok(part.indices.every(index => Number.isInteger(index) && index >= 0 && index < part.positions.length / 3))
+    for (let i = 0; i < part.normals.length; i += 3) {
+      const length = Math.hypot(...part.normals.slice(i, i + 3)) / data.normalScale
+      assert.ok(Math.abs(length - 1) < .002)
+    }
+    triangles += part.indices.length / 3
+  }
+  assert.ok(data.positionScale > 0 && data.normalScale > 0)
+  assert.ok(triangles > 0 && triangles < 10000)
+})
 
 test('empty and invalid inputs use the real default experience', () => {
   assert.deepEqual(parseExperience(''), { space: 'atrium', light: 'morning' })
